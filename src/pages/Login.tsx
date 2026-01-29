@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { BookOpen, Eye, EyeOff, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -105,11 +106,11 @@ const Login = () => {
               // Check for bypass credentials
               if (email.toLowerCase() === userEmail.toLowerCase() && password === userPassword) {
                 // Determine bypass destination
-                window.location.href = "/browse"; // Redirect regular user to browse or dashboard
+                navigate("/profile"); // Redirect regular user to browse or dashboard
                 return;
               }
               if (email.toLowerCase() === sellerEmail.toLowerCase() && password === sellerPassword) {
-                window.location.href = "/sell"; // Redirect seller
+                navigate("/sell"); // Redirect seller
                 return;
               }
               // Fallback / Placeholder for real auth
