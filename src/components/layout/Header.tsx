@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Menu, X, BookOpen, Upload, Users, Info } from "lucide-react";
+import { Search, Menu, X, BookOpen, Upload, Users, Info, LayoutDashboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -18,6 +18,7 @@ const Header = () => {
   };
 
   const navLinks = [
+    { to: "/profile", label: "Dashboard", icon: LayoutDashboard },
     { to: "/browse", label: "Browse Notes", icon: BookOpen },
     { to: "/sell", label: "Sell Resources", icon: Upload },
     { to: "/contributors", label: "Top Contributors", icon: Users },
