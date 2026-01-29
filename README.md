@@ -36,7 +36,7 @@ You need to have Node.js & npm installed on your machine.
 
 1.  Clone the repository:
     ```sh
-    git clone <YOUR_GIT_URL>
+    git clone <https://github.com/SynofexTester/Study-Savy.git>
     ```
 
 2.  Navigate to the project directory:
