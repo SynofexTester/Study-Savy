@@ -121,6 +121,27 @@ const Browse = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [sortBy, setSortBy] = useState("popular");
   const [showFilters, setShowFilters] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(6);
+
+  // Filter notes based on search and category
+  const filteredNotes = notes.filter((note) => {
+    const matchesSearch =
+      note.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      note.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      note.university.toLowerCase().includes(searchQuery.toLowerCase());
+
+    const matchesCategory =
+      selectedCategory === "All" ||
+      (selectedCategory === "Medical" && note.subject === "Medicine") ||
+      (selectedCategory === "Business" && note.subject === "Economics") ||
+      note.subject === selectedCategory;
+
+    return matchesSearch && matchesCategory;
+  });
+
+  const handleLoadMore = () => {
+    setVisibleCount((prev) => prev + 6);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -177,11 +198,10 @@ const Browse = () => {
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                    selectedCategory === category
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${selectedCategory === category
                       ? "bg-primary text-primary-foreground"
                       : "bg-muted text-muted-foreground hover:bg-muted/80"
-                  }`}
+                    }`}
                 >
                   {category}
                 </button>
@@ -191,7 +211,7 @@ const Browse = () => {
             {/* Sort and Filter Bar */}
             <div className="flex items-center justify-between">
               <p className="text-muted-foreground">
-                Showing <span className="font-medium text-foreground">{notes.length}</span> results
+                Showing <span className="font-medium text-foreground">{filteredNotes.length}</span> results
               </p>
               <div className="flex items-center gap-2">
                 <span className="text-sm text-muted-foreground hidden sm:inline">Sort by:</span>
@@ -212,7 +232,7 @@ const Browse = () => {
 
           {/* Notes Grid */}
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {notes.map((note, index) => (
+            {filteredNotes.slice(0, visibleCount).map((note, index) => (
               <motion.div
                 key={note.id}
                 initial={{ opacity: 0, y: 20 }}
@@ -276,12 +296,25 @@ const Browse = () => {
           </div>
 
           {/* Load More */}
-          <div className="text-center mt-12">
-            <Button variant="outline" size="lg" className="rounded-xl">
-              Load More Notes
-              <ChevronDown className="w-4 h-4 ml-2" />
-            </Button>
-          </div>
+          {visibleCount < filteredNotes.length && (
+            <div className="text-center mt-12">
+              <Button
+                variant="outline"
+                size="lg"
+                className="rounded-xl"
+                onClick={handleLoadMore}
+              >
+                Load More Notes
+                <ChevronDown className="w-4 h-4 ml-2" />
+              </Button>
+            </div>
+          )}
+
+          {filteredNotes.length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground text-lg">No notes found matching your criteria.</p>
+            </div>
+          )}
         </div>
       </main>
 

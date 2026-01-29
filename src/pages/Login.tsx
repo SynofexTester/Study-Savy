@@ -91,7 +91,31 @@ const Login = () => {
           </div>
 
           {/* Form */}
-          <form className="space-y-4">
+          {/* Form */}
+          <form
+            className="space-y-4"
+            onSubmit={(e) => {
+              e.preventDefault();
+
+              const userEmail = import.meta.env.VITE_BYPASS_USER_EMAIL || "user@user.com";
+              const userPassword = import.meta.env.VITE_BYPASS_USER_PASSWORD || "User123";
+              const sellerEmail = import.meta.env.VITE_BYPASS_SELLER_EMAIL || "seller@seller.com";
+              const sellerPassword = import.meta.env.VITE_BYPASS_SELLER_PASSWORD || "Seller123";
+
+              // Check for bypass credentials
+              if (email.toLowerCase() === userEmail.toLowerCase() && password === userPassword) {
+                // Determine bypass destination
+                window.location.href = "/browse"; // Redirect regular user to browse or dashboard
+                return;
+              }
+              if (email.toLowerCase() === sellerEmail.toLowerCase() && password === sellerPassword) {
+                window.location.href = "/sell"; // Redirect seller
+                return;
+              }
+              // Fallback / Placeholder for real auth
+              alert(`Invalid credentials. Try ${userEmail} / ${userPassword} (for Buyer) or ${sellerEmail} / ${sellerPassword} (for Seller)`);
+            }}
+          >
             <div>
               <Label htmlFor="email">Email Address</Label>
               <Input
